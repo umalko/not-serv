@@ -1,6 +1,7 @@
 package com.example.notificationservice.service.impl;
 
-import com.example.notificationservice.model.Notification;
+import com.example.notificationservice.dto.NotificationDto;
+import com.example.notificationservice.model.NotificationType;
 import com.example.notificationservice.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
@@ -14,16 +15,16 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public void notifyAboutNewChat(String chatId, String departmentId) {
-        sendNotification("new.chat", departmentId, chatId);
+        sendNotification(NotificationType.NEW, departmentId, chatId);
     }
 
     @Override
     public void notifyAboutAnsweredChat(String chatId, String departmentId) {
-        sendNotification("chat.is.answered", departmentId, chatId);
+        sendNotification(NotificationType.ANSWERED, departmentId, chatId);
     }
 
-    private void sendNotification(String notificationType, String departmentId, String chatId) {
-        Notification notification = new Notification(notificationType, chatId, departmentId);
+    private void sendNotification(NotificationType notificationType, String departmentId, String chatId) {
+        NotificationDto notification = new NotificationDto(notificationType.name(), chatId, departmentId);
         messagingTemplate.convertAndSend("/department/" + departmentId, notification);
     }
 }

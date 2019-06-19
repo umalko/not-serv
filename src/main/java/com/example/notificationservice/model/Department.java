@@ -3,6 +3,8 @@ package com.example.notificationservice.model;
 import lombok.Data;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Data
@@ -10,6 +12,14 @@ import javax.persistence.Table;
 @Table(name = "departments")
 public class Department {
 
-    private String id;
+    @Id
+    @GeneratedValue
+    private Long id;
+    private String departmentId;
     private String name;
+
+    public Department(String departmentId, String name) {
+        this.departmentId = departmentId;
+        this.name = name;
+    }
 }

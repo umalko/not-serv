@@ -10,13 +10,13 @@ import javax.sql.DataSource;
 @Configuration
 public class PostgresConfig {
 
-    @Value("${APP.PGURL:jdbc:postgresql://localhost:5432/notification-service-db}")
+    @Value("${PGURL:jdbc:postgresql://localhost:5432/notification-service-db}")
     private String url;
 
-    @Value("${APP.PGUSER:postgres}")
+    @Value("${PGUSER:postgres}")
     private String username;
 
-    @Value("${APP.PGPASSWORD:root}")
+    @Value("${PGPASSWORD:root}")
     private String password;
 
     @Bean

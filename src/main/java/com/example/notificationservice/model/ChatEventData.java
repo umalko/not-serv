@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.Instant;
 
 @Data
@@ -20,6 +17,12 @@ public class ChatEventData {
     @Id
     @GeneratedValue
     private Long id;
+
     private String chatId;
     private Instant receivedAt;
+
+    public ChatEventData(String chatId, Instant receivedAt) {
+        this.chatId = chatId;
+        this.receivedAt = receivedAt;
+    }
 }

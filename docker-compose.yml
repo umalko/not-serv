@@ -1,12 +1,19 @@
 version: '3'
 services:
+  nginx:
+    restart: always
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./nginx
+    ports:
+    - '3050:80'
   postgres:
-    image: 'postgres:latest'
+    image: postgres:latest
   notification-service:
     build:
       dockerfile: Dockerfile.dev
       context: .
     environment:
-    - APP.PGUSER=postgres
-    - APP.PGURL=jdbc:postgresql://postgres:5432/notification-service-db
-    - APP.PGPASSWORD=postgres_password
+    - PGUSER=postgres
+    - PGURL=jdbc:postgresql://postgres:5432/postgres
+    - PGPASSWORD=postgres_password
