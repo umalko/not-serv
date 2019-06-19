@@ -1,0 +1,12 @@
+version: '3'
+services:
+  postgres:
+    image: 'postgres:latest'
+  notification-service:
+    build:
+      dockerfile: Dockerfile.dev
+      context: .
+    environment:
+    - APP.PGUSER=postgres
+    - APP.PGURL=jdbc:postgresql://postgres:5432/notification-service-db
+    - APP.PGPASSWORD=postgres_password
