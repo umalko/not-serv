@@ -17,7 +17,7 @@ public class ChatController {
     private final ScheduleService scheduleService;
 
     @PostMapping("/new")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     public Object newChat(@RequestBody NewChatEvent event) {
         notificationService.notifyAboutNewChat(event.getChatId(), event.getDepartmentId());
         scheduleService.scheduleReassignment(event.getChatId());

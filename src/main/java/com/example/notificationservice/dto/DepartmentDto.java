@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class DepartmentDto {
 
-    private String id;
+    private String departmentId;
     private String name;
 }

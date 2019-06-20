@@ -3,9 +3,8 @@ package com.example.notificationservice.controller;
 import com.example.notificationservice.dto.DepartmentDto;
 import com.example.notificationservice.service.DepartmentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -16,8 +15,31 @@ public class DepartmentController {
 
     private final DepartmentService departmentService;
 
-    @GetMapping("/all")
+    @GetMapping
     public List<DepartmentDto> listDepartments() {
-        return departmentService.findAllDepartments();
+        return departmentService.findAll();
+    }
+
+    @GetMapping("/id/{id}")
+    public DepartmentDto findByDepartmentId(@PathVariable("id") String id) {
+        return departmentService.findByDepartmentId(id);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public void create(@RequestBody DepartmentDto departmentDto) {
+        departmentService.save(departmentDto);
+    }
+
+    @PutMapping
+    @ResponseStatus(HttpStatus.OK)
+    public void update(@RequestBody DepartmentDto departmentDto) {
+        departmentService.update(departmentDto);
+    }
+
+    @DeleteMapping("/id/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void delete(@PathVariable("id") String id) {
+        departmentService.deleteByDepartmentId(id);
     }
 }
