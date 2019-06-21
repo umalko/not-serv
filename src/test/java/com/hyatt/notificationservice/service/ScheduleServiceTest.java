@@ -1,8 +1,9 @@
 package com.hyatt.notificationservice.service;
 
+import com.google.common.collect.Lists;
 import com.hyatt.notificationservice.repository.ChatRepository;
 import com.hyatt.notificationservice.service.impl.ScheduleServiceImpl;
-import com.google.common.collect.Lists;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
@@ -12,6 +13,7 @@ import org.mockito.Mockito;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.client.RestTemplate;
 
 import static org.mockito.Matchers.any;
@@ -22,6 +24,10 @@ public class ScheduleServiceTest {
 
     private static final String CHAT_ID = "CHAT_ID";
     private static final String HTTPBIN_URL = "http://httpbin.org/post";
+    private static final Integer DEFAULT_TRIGGER_TIMEOUT = 20;
+
+    private static final String TRIGGER_TIMEOUT_FIELD = "triggerTimeout";
+    private static final String OMAHA_DEPARTMENT_URL_FIELD = "omahaDepartmentUrl";
 
     @Mock
     private ChatRepository chatRepository;
@@ -31,6 +37,12 @@ public class ScheduleServiceTest {
 
     @InjectMocks
     private ScheduleServiceImpl scheduleService;
+
+    @Before
+    public void setUp() {
+        ReflectionTestUtils.setField(scheduleService, TRIGGER_TIMEOUT_FIELD, DEFAULT_TRIGGER_TIMEOUT);
+        ReflectionTestUtils.setField(scheduleService, OMAHA_DEPARTMENT_URL_FIELD, HTTPBIN_URL);
+    }
 
     @Test
     public void scheduleReassignment() {

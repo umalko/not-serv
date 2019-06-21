@@ -5,6 +5,7 @@ import com.hyatt.notificationservice.repository.ChatRepository;
 import com.hyatt.notificationservice.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -21,8 +22,11 @@ import java.util.Collection;
 @RequiredArgsConstructor
 public class ScheduleServiceImpl implements ScheduleService {
 
-    private static final Duration TIMEOUT = Duration.ofSeconds(20);
-    private static final String HTTPBIN_URL = "http://httpbin.org/post";
+    @Value("${app.trigger.timeout:20}")
+    private Integer triggerTimeout;
+
+    @Value("${app.omahaDepartmentUrl:http://httpbin.org/post}")
+    private String omahaDepartmentUrl;
 
     private final ChatRepository chatRepository;
     private final RestTemplate restTemplate;
@@ -40,14 +44,14 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     @Scheduled(fixedRate = 1000)
     public void checkUnansweredChats() {
-        Instant due = Clock.systemUTC().instant().minus(TIMEOUT);
+        Instant due = Clock.systemUTC().instant().minus(Duration.ofSeconds(triggerTimeout));
         Collection<String> unansweredChatIds = chatRepository.findListOfChatIdByReceivedAtBefore(due);
         chatRepository.deleteByReceivedAtBefore(due);
-        unansweredChatIds.forEach(this::assignToOmaha);
+        unansweredChatIds.parallelStream().forEach(this::assignToOmaha);
     }
 
     private void assignToOmaha(String chatId) {
         log.info("New chat {} was sent to Omaha department!", chatId);
-        restTemplate.postForObject(HTTPBIN_URL, chatId, Void.class);
+        restTemplate.postForObject(omahaDepartmentUrl, chatId, Void.class);
     }
 }
