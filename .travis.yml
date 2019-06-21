@@ -8,11 +8,15 @@ services:
 before_install:
 - chmod +x mvnw
 - docker pull openjdk:8-jdk-alpine
+- docker-compose run -p 8092:8092 -d --rm performance-tests-env
+- export PERFORMANCE_TESTS_ENV_URL=(docker-machine ip)
 
 # Test & Build SpringBoot app
 script:
 - mvn test
 - mvn clean package
+- mvn gatling:test -Dspring.profiles.active=test
+- docker-compose down
 
 # Create Docker image for our app and push it to Dockerhub repository and send messages to the Teams channel after the `script` job is successfully executed
 after_success:
