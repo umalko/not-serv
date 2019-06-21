@@ -1,4 +1,4 @@
-package com.example.notificationservice;
+package com.hyatt.notificationservice;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
