@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -14,8 +15,11 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private static final String[] STATIC_REGEX_PATTERNS = {"/", "/error", "/favicon.ico", "/**/*.png", "/**/*.gif",
+            "/**/*.svg", "/**/*.jpg", "/**/*.html", "/**/*.css", "/**/*.js", "/*.html", "/webjars"};
+
     private static final String[] SWAGGER_PATTERNS = {"/swagger-ui.html/**", "/webjars/**", "/swagger-resources/**", "/v2/api-docs/**"};
-    private static final String[] STATIC_RESOURCES = {"*.html", "/webjars"};
+
 
     private static final String USER_ROLE = "USER";
     private static final String NOOP_SECRET = "{noop}";
@@ -26,16 +30,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${app.user.password:extensionuserpass}")
     private String password;
 
+    // @formatter:off
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
-                .authorizeRequests().anyRequest().authenticated()
-                .antMatchers(SWAGGER_PATTERNS).permitAll()
-                .antMatchers(STATIC_RESOURCES).permitAll()
-                .and()
+                .csrf()
+                    .disable()
+                .authorizeRequests()
+                    .antMatchers(HttpMethod.OPTIONS)
+                        .permitAll()
+                    .antMatchers(STATIC_REGEX_PATTERNS)
+                        .permitAll()
+                    .antMatchers(SWAGGER_PATTERNS)
+                        .permitAll()
+                    .anyRequest()
+                        .authenticated()
+                    .and()
                 .httpBasic();
     }
+    // @formatter:on
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
