@@ -18,11 +18,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String[] STATIC_REGEX_PATTERNS = {"/", "/error", "/favicon.ico", "/**/*.png", "/**/*.gif",
             "/**/*.svg", "/**/*.jpg", "/**/*.html", "/**/*.css", "/**/*.js", "/*.html", "/webjars"};
 
-    private static final String[] SWAGGER_PATTERNS = {"/swagger-ui.html/**", "/webjars/**", "/swagger-resources/**", "/v2/api-docs/**"};
+    private static final String[] SWAGGER_PATTERNS = {"/swagger-ui.html/**", "/webjars/**", "/swagger-resources/**", "/v2/api-docs/**", "/csrf"};
 
 
     private static final String USER_ROLE = "USER";
     private static final String NOOP_SECRET = "{noop}";
+    private static final String[] SOCKET_REGEX = {"/socket/**", "/notifications/**", "/notifications"};
 
     @Value("${app.user.name:extensionuser}")
     private String name;
@@ -42,6 +43,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(STATIC_REGEX_PATTERNS)
                         .permitAll()
                     .antMatchers(SWAGGER_PATTERNS)
+                        .permitAll()
+                    .antMatchers(SOCKET_REGEX)
                         .permitAll()
                     .anyRequest()
                         .authenticated()
