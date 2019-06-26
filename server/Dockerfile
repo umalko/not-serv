@@ -1,11 +1,11 @@
 FROM openjdk:8-jdk-alpine as build
 WORKDIR /workspace/app
 
-COPY mvnw .
-COPY .mvn .mvn
-COPY pom.xml .
-COPY src src
+COPY server/mvnw .
+COPY server/.mvn .mvn
+COPY server/pom.xml .
+COPY server/src src
 
-RUN ./mvnw install -DskipTests=true
+RUN ./server/mvnw install -DskipTests=true
 
-CMD ["java", "-jar", "target/notification-service-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "server/target/notification-service-0.0.1-SNAPSHOT.jar"]
