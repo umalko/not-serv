@@ -13,6 +13,12 @@ cache:
 env:
   global:
   - SHA=$(git rev-parse HEAD)
+  - PATH=$HOME/.local/bin:$PATH
+  - APP_NAME=my_example_app
+  - AWS_ECR_ACCOUNT=09500000000
+  - AWS_DEFAULT_REGION
+  - AWS_ACCESS_KEY_ID
+  - AWS_SECRET_ACCESS_KEY
 
 before_install:
 - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
@@ -24,11 +30,14 @@ before_install:
 - mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$HOME/bin:$PATH
 - kubectl version --short --client
 
-#- curl -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.13.7/2019-06-11/bin/linux/amd64/aws-iam-authenticator
-#- python3 -m pip install homeassistant
-#- pip3 install awscli --upgrade --user
+- curl -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.13.7/2019-06-11/bin/linux/amd64/aws-iam-authenticator
+- pip install --user awscli
+- export PATH=$PATH:$HOME/.local/bin
+- eval $(aws ecr get-login --no-include-email --region us-east-2)
+
 #- aws eks update-kubeconfig --name nginxcluster
-#- kubectl apply  -f k8s/aws-auth-cm.yaml
+- aws --version
+#- kubectl apply -f k8s/aws-auth-cm.yaml
 
 # Test & Build SpringBoot app
 script:
@@ -38,8 +47,8 @@ script:
 - cd ..
 - docker-compose down
 
-deploy:
-  provider: script
-  script: bash ./deploy.sh
-  on:
-    branch: master
+#deploy:
+#  provider: script
+#  script: bash ./deploy.sh
+#  on:
+#    branch: master
