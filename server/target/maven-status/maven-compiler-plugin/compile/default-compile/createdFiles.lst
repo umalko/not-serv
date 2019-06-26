@@ -1,4 +1,3 @@
-com\hyatt\notificationservice\config\auth\WebSocketAuthenticationSecurityConfig.class
 com\hyatt\notificationservice\service\NotificationService.class
 com\hyatt\notificationservice\config\SwaggerConfig.class
 com\hyatt\notificationservice\service\impl\ConfigurationServiceImpl.class
@@ -6,19 +5,16 @@ com\hyatt\notificationservice\model\NotificationType.class
 com\hyatt\notificationservice\config\CorsFilter.class
 com\hyatt\notificationservice\service\impl\NotificationServiceImpl.class
 com\hyatt\notificationservice\service\impl\ScheduleServiceImpl.class
-com\hyatt\notificationservice\config\auth\WebSocketAuthorizationSecurityConfig.class
 com\hyatt\notificationservice\dto\NewChatEvent.class
 com\hyatt\notificationservice\util\TransformBeanUtil.class
 com\hyatt\notificationservice\NotificationServiceApplication.class
 com\hyatt\notificationservice\config\LoggingConfig.class
 com\hyatt\notificationservice\dto\DepartmentDto.class
-com\hyatt\notificationservice\config\auth\WebSocketAuthenticatorService.class
 com\hyatt\notificationservice\exception\ResourceNotFoundException.class
 com\hyatt\notificationservice\config\SecurityConfig.class
 com\hyatt\notificationservice\util\TransformDepartmentUtil.class
 com\hyatt\notificationservice\model\Department.class
 com\hyatt\notificationservice\service\ConfigurationService.class
-com\hyatt\notificationservice\config\auth\AuthChannelInterceptorAdapter.class
 com\hyatt\notificationservice\config\WebSocketConfig.class
 com\hyatt\notificationservice\dto\ChatAnsweredEvent.class
 com\hyatt\notificationservice\service\impl\DepartmentServiceImpl.class

@@ -24,6 +24,8 @@ services:
       dockerfile: Dockerfile
       context: ./server
     environment:
+    - server.port=8091
     - PGUSER=postgres
     - PGURL=jdbc:postgresql://postgres:5432/postgres
     - PGPASSWORD=postgres_password
+#    command: ["java", "-jar", "target/notification-service-0.0.1-SNAPSHOT.jar"]
