@@ -1,4 +1,4 @@
-sudo: required
+sudo: true
 language: java
 jdk:
 - openjdk8
@@ -17,23 +17,24 @@ env:
 before_install:
 - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 - chmod +x server/mvnw
-- docker pull openjdk:8-jdk-alpine
 - docker-compose run -p 8092:8092 -d --rm performance-tests-env
-- export PERFORMANCE_TESTS_ENV_URL=(docker-machine ip)
 
 - curl -o kubectl https://amazon-eks.s3-us-west-2.amazonaws.com/1.13.7/2019-06-11/bin/linux/amd64/kubectl
 - chmod +x ./kubectl
 - mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$HOME/bin:$PATH
 - kubectl version --short --client
 
-- curl -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.13.7/2019-06-11/bin/linux/amd64/aws-iam-authenticator
-- aws eks update-kubeconfig --name nginxcluster
+#- curl -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.13.7/2019-06-11/bin/linux/amd64/aws-iam-authenticator
+#- python3 -m pip install homeassistant
+#- pip3 install awscli --upgrade --user
+#- aws eks update-kubeconfig --name nginxcluster
+#- kubectl apply  -f k8s/aws-auth-cm.yaml
 
 # Test & Build SpringBoot app
 script:
 - cd server
-- mvn clean package
-- mvn gatling:test -Dspring.profiles.active=test
+- mvn clean package -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
+- mvn gatling:test -Dspring.profiles.active=test -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
 - cd ..
 - docker-compose down
 

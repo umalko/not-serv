@@ -1,21 +1,13 @@
-FROM maven:3-jdk-8
+FROM maven:3.5-jdk-8-alpine as build
+WORKDIR /app
 
-ENV HOME=/usr/src/app
+COPY mvnw .
+COPY .mvn .mvn
+COPY pom.xml .
+COPY src src
+RUN mvn install -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
 
-RUN mkdir -p $HOME
-
-WORKDIR $HOME
-
-# 1, add pom.xml only here, 2, and start downloading dependencies
-
-ADD pom.xml $HOME
-
-RUN ["/usr/local/bin/mvn-entrypoint.sh", "mvn", "verify", "clean", "--fail-never"]
-
-# 3, now we can add all source code and start compiling
-
-ADD . $HOME
-
-RUN ["mvn", "package", "-DskipTests=true"]
-
-CMD ["java", "-jar", "./target/notification-service-0.0.1-SNAPSHOT.jar"]
+FROM openjdk:8-jre-alpine
+WORKDIR /app
+COPY --from=build /app/target/*.jar /app/app.jar
+CMD ["java -jar app.jar"]
