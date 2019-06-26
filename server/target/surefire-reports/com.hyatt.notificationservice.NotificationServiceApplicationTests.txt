@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.hyatt.notificationservice.NotificationServiceApplicationTests
--------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 13.055 s - in com.hyatt.notificationservice.NotificationServiceApplicationTests
