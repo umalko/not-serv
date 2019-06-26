@@ -5,7 +5,16 @@ jdk:
 services:
 - docker
 
+cache:
+  directories:
+  - '$HOME/.m2/repository'
+
+env:
+  global:
+  - SHA=$(git rev-parse HEAD)
+
 before_install:
+- echo "$DOCKER_PASSWORD" | docker login -u "DOCKER_USERNAME" --password-stdin
 - chmod +x mvnw
 - docker pull openjdk:8-jdk-alpine
 - docker-compose run -p 8092:8092 -d --rm performance-tests-env
@@ -18,10 +27,8 @@ script:
 - mvn gatling:test -Dspring.profiles.active=test
 - docker-compose down
 
-# Create Docker image for our app and push it to Dockerhub repository and send messages to the Teams channel after the `script` job is successfully executed
-after_success:
-- docker-compose build
-# Log in to the Docker CLI
-- echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
-# Take those images and push it to the docker hub
-- docker push mavsvl/notification-service
+deploy:
+  provider: script
+  script: bash ./deploy.sh
+  on:
+    branch: master
