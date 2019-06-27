@@ -1,10 +1,10 @@
 package com.hyatt.notificationservice.service.impl;
 
+import com.google.common.collect.Lists;
 import com.hyatt.notificationservice.exception.ResourceNotFoundException;
 import com.hyatt.notificationservice.model.Configuration;
 import com.hyatt.notificationservice.repository.ConfigurationRepository;
 import com.hyatt.notificationservice.service.ConfigurationService;
-import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 
+/**
+ * Implementation of {@link ConfigurationService}. CRUD operations.
+ */
 @Slf4j
 @Service
 @Transactional

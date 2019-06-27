@@ -1,12 +1,12 @@
 package com.hyatt.notificationservice.service.impl;
 
+import com.google.common.collect.Lists;
 import com.hyatt.notificationservice.dto.DepartmentDto;
 import com.hyatt.notificationservice.exception.ResourceNotFoundException;
 import com.hyatt.notificationservice.model.Department;
 import com.hyatt.notificationservice.repository.DepartmentRepository;
 import com.hyatt.notificationservice.service.DepartmentService;
 import com.hyatt.notificationservice.util.TransformDepartmentUtil;
-import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -19,6 +19,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Implementation of {@link DepartmentService}. CRUD operations.
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor

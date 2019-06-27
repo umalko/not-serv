@@ -16,6 +16,9 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Collection;
 
+/**
+ * Implementation of {@link ScheduleService}
+ */
 @Slf4j
 @Service
 @Transactional
@@ -31,16 +34,28 @@ public class ScheduleServiceImpl implements ScheduleService {
     private final ChatRepository chatRepository;
     private final RestTemplate restTemplate;
 
+    /**
+     * {@inheritDoc}
+     * See also: {@link ScheduleService#scheduleReassignment(String)}
+     */
     @Override
     public void scheduleReassignment(String chatId) {
         chatRepository.save(new ChatEventData(chatId, Instant.now()));
     }
 
+    /**
+     * {@inheritDoc}
+     * See also: {@link ScheduleService#cancelReassignment(String)}
+     */
     @Override
     public void cancelReassignment(String chatId) {
         chatRepository.deleteByChatId(chatId);
     }
 
+    /**
+     * {@inheritDoc}
+     * See also: {@link ScheduleService#checkUnansweredChats()}
+     */
     @Override
     @Scheduled(fixedRate = 1000)
     public void checkUnansweredChats() {

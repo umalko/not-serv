@@ -4,6 +4,9 @@ import com.hyatt.notificationservice.dto.DepartmentDto;
 
 import java.util.List;
 
+/**
+ * Department Service contains CRUD operations
+ */
 public interface DepartmentService {
 
     List<DepartmentDto> findAll();

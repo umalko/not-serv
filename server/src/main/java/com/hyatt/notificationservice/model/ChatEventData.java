@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.Instant;
 
+/**
+ * New Event from chat. Contains: chat Id; time of the event(receivedAt)
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

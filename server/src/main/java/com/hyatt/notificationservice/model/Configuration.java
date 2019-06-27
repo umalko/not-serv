@@ -8,6 +8,9 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * Configuration for th API. Basic key - value object
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

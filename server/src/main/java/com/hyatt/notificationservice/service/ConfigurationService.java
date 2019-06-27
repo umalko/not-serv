@@ -5,6 +5,9 @@ import com.hyatt.notificationservice.model.Configuration;
 
 import java.util.List;
 
+/**
+ * Configuration Service contains CRUD operations
+ */
 public interface ConfigurationService {
 
     List<Configuration> findAll();
