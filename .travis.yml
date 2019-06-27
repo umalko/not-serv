@@ -10,45 +10,39 @@ cache:
   - .autoconf
   - $HOME/.m2
 
-env:
-  global:
-  - SHA=$(git rev-parse HEAD)
-  - PATH=$HOME/.local/bin:$PATH
-  - APP_NAME=my_example_app
-  - AWS_ECR_ACCOUNT=09500000000
-  - AWS_DEFAULT_REGION
-  - AWS_ACCESS_KEY_ID
-  - AWS_SECRET_ACCESS_KEY
-
 before_install:
-- echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 - chmod +x server/mvnw
 - docker-compose run -p 8092:8092 -d --rm performance-tests-env
 
-- curl -o kubectl https://amazon-eks.s3-us-west-2.amazonaws.com/1.13.7/2019-06-11/bin/linux/amd64/kubectl
-- chmod +x ./kubectl
-- mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$HOME/bin:$PATH
-- kubectl version --short --client
-
-- curl -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.13.7/2019-06-11/bin/linux/amd64/aws-iam-authenticator
-- pip install --user awscli
-- export PATH=$PATH:$HOME/.local/bin
-- eval $(aws ecr get-login --no-include-email --region us-east-2)
-
-#- aws eks update-kubeconfig --name nginxcluster
-- aws --version
-#- kubectl apply -f k8s/aws-auth-cm.yaml
 
 # Test & Build SpringBoot app
 script:
 - cd server
 - mvn clean package -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
-- mvn gatling:test -Dspring.profiles.active=test -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
+- mvn gatling:test -Dspring.profiles.active=test -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn # run performance tests
 - cd ..
 - docker-compose down
 
+after_success:
+- docker build -t mavsvl/notification-service-client ./client
+- docker build -t mavsvl/notification-service-nginx ./nginx
+- docker build -t mavsvl/notification-service-server ./server
+# Log in to the Docker CLI
+- echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+# Take those images and push it to the docker hub
+- docker push mavsvl/notification-service-client
+- docker push mavsvl/notification-service-nginx
+- docker push mavsvl/notification-service-server
+
 #deploy:
-#  provider: script
-#  script: bash ./deploy.sh
+#  provider: elasticbeanstalk
+#  region: eu-west-1
+#  app: notification-service
+#  env: MultiDocker-env
+#  bucket_name: elasticbeanstalk-eu-west-1-728900069172
+#  bucket_path: notification-service
 #  on:
 #    branch: master
+#  access_key_id: $AWS_ACCESS_KEY
+#  secret_access_key:
+#    secure: $AWS_SECRET_KEY
